@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Validator\ComplexGroupsGenerator;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -10,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     attributes={"validation_groups"={User::class, "validationGroups"}},
+ *     attributes={"validation_groups"=ComplexGroupsGenerator::class},
  *     normalizationContext={"groups"={"read", "admin-read", "help"}},
  *     denormalizationContext={"groups"={"write", "user-write", "admin-write"}},
  * )
@@ -140,18 +141,6 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    /**
-     * Return dynamic validation groups.
-     *
-     * @param self $book Contains the instance of Book to validate.
-     *
-     * @return string[]
-     */
-    public static function validationGroups(self $user)
-    {
-        return [$user->getAuth()];
     }
 
     public function getAuth(): ?string
